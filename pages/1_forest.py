@@ -28,7 +28,7 @@ def read_data():
 
     for i in range(0,9):
         value_translation[str(i)] = translate_values(np.array(x)[:,i], np.array(x_cat)[:, i])
-    return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "test": value_translation}
+    return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
     rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)

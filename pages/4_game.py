@@ -30,7 +30,7 @@ def read_data():
 
     for i in range(0,9):
         value_translation[str(i)] = translate_values(np.array(x)[:,i], np.array(x_cat)[:, i])
-    return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "test": value_translation}
+    return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
     rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
@@ -87,7 +87,7 @@ def translate_values(value_array, number_array):
     return {x: y for x,y in zip(sorted(set(value_list), key=value_list.index), sorted(set(number_list), key=number_list.index))}
 
 def predict():
-    translated_game = np.array([int(st.session_state['ttt_data']['test'][str(y)][x]) for x, y in zip(st.session_state['game'], range(0,9))]).reshape(1,9)
+    translated_game = np.array([int(st.session_state['ttt_data']['values'][str(y)][x]) for x, y in zip(st.session_state['game'], range(0,9))]).reshape(1,9)
     st.session_state['f_pred'] = list(st.session_state['forest']['model'].predict(translated_game))[0] == 'positive'
     st.session_state['n_pred'] = list(st.session_state['neighbour']['model'].predict(translated_game))[0] == 'positive'
     st.session_state['b_pred'] = list(st.session_state['bayes']['model'].predict(translated_game))[0] == 'positive'
