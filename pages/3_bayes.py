@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -21,8 +22,14 @@ def read_data():
     ce_ord = ce.OrdinalEncoder(cols=feat_cols)
     x_cat = ce_ord.fit_transform(x)
 
-    x_train, x_test, y_train, y_test = train_test_split(x_cat, y, test_size=0.3)
-    return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test}
+    x_train, x_test, y_train, y_test = train_test_split(x_cat, y, test_size=0.3, random_state=0)
+    
+    # extra for game
+    value_translation = {}
+
+    for i in range(0,9):
+        value_translation[str(i)] = translate_values(np.array(x)[:,i], np.array(x_cat)[:, i])
+    return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "test": value_translation}
 
 def forest():
     rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
@@ -30,14 +37,19 @@ def forest():
     rfc = rfc.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred = rfc.predict(st.session_state.ttt_data["x_test"])
 
-    return {"accuracy": accuracy_score(st.session_state.ttt_data["y_test"], y_pred), "confusion": confusion_matrix(st.session_state.ttt_data["y_test"], y_pred, labels=["positive", "negative"])}
+    return {"accuracy": accuracy_score(st.session_state.ttt_data["y_test"], y_pred), "confusion": confusion_matrix(st.session_state.ttt_data["y_test"], y_pred, labels=["positive", "negative"]), "model": rfc}
 
 def bayes():
     gnb = GaussianNB()
 
     gnb = gnb.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred_g = gnb.predict(st.session_state.ttt_data["x_test"])
-    return {"accuracy": accuracy_score(st.session_state.ttt_data["y_test"], y_pred_g), "confusion": confusion_matrix(st.session_state.ttt_data["y_test"], y_pred_g, labels=["positive", "negative"])}
+    return {"accuracy": accuracy_score(st.session_state.ttt_data["y_test"], y_pred_g), "confusion": confusion_matrix(st.session_state.ttt_data["y_test"], y_pred_g, labels=["positive", "negative"]), "model": gnb}
+
+def translate_values(value_array, number_array):
+    value_list = list(value_array)
+    number_list = list(number_array)
+    return {x: y for x,y in zip(sorted(set(value_list), key=value_list.index), sorted(set(number_list), key=number_list.index))}
 
 # state variables
 if 'depth' not in st.session_state:
@@ -49,7 +61,7 @@ if "ttt_data" not in st.session_state:
 if 'forest' not in st.session_state:
     st.session_state['forest'] = forest()
 
-if 'naive' not in st.session_state:
+if 'bayes' not in st.session_state:
     st.session_state['bayes'] = bayes()
 
 # app
