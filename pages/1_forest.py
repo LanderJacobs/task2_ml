@@ -63,8 +63,8 @@ if 'forest' not in st.session_state:
 # app
 st.title("Random Forest with depth of " + str(st.session_state['depth']))
 slider_value = st.slider(label="Diepte van trees", min_value=1, max_value=10, value=st.session_state["depth"])
-st.button("Change", on_click=button_press)
-st.write("Accuracy of Random Forest: " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
-st.subheader("Voorspellingen van het random forest:")
-st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wins', 'o wins'], index=['x wins', 'o wins']))
+st.button("Pas aan", on_click=button_press)
+st.write("Accuraatheid van het Random Forest: " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
+st.subheader("Voorspellingen van het Random Forest:")
+st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
 

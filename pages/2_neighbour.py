@@ -74,12 +74,12 @@ if 'neighbour' not in st.session_state:
 # app
 st.title("Nearest Neighbour with " + str(st.session_state['neighbours']) + " neighbours")
 slider_value = st.slider(label="Aantal neighbours", min_value=1, max_value=10, value=st.session_state["neighbours"])
-st.button("Change", on_click=button_press)
+st.button("Pas aan", on_click=button_press)
 
-st.write("Accuracy of Nearest Neighbour: " + str(round(st.session_state['neighbour']['accuracy'] * 100, 2)) + " %")
-st.subheader("Voorspellingen van de nearest neighbours:")
-st.table(pd.DataFrame(st.session_state['neighbour']['confusion'], columns=['x wins', 'o wins'], index=['x wins', 'o wins']))
+st.write("Accuraatheid van Nearest Neighbour: " + str(round(st.session_state['neighbour']['accuracy'] * 100, 2)) + " %")
+st.subheader("Voorspellingen van de Nearest Neighbours:")
+st.table(pd.DataFrame(st.session_state['neighbour']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
 
-st.write("Accuracy of Random Forest with depth of " + str(st.session_state['depth']) + ": " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
-st.subheader("Voorspellingen van het random forest:")
-st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wins', 'o wins'], index=['x wins', 'o wins']))
+st.write("Accuraatheid van het Random Forest met diepte van " + str(st.session_state['depth']) + ": " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
+st.subheader("Voorspellingen van het Random Forest:")
+st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))

@@ -66,12 +66,11 @@ if 'bayes' not in st.session_state:
 
 # app
 st.title("Naive Bayes")
-st.write("Bayes laat niet echt toe om parameters aan te passen.")
 
-st.write("Accuracy of Naive Bayes: " + str(round(st.session_state['bayes']['accuracy'] * 100, 2)) + " %")
-st.subheader("Voorspellingen van Bayes:")
-st.table(pd.DataFrame(st.session_state['bayes']['confusion'], columns=['x wins', 'o wins'], index=['x wins', 'o wins']))
+st.write("Accuraatheid van Naive Bayes: " + str(round(st.session_state['bayes']['accuracy'] * 100, 2)) + " %")
+st.subheader("Voorspellingen van Naive Bayes:")
+st.table(pd.DataFrame(st.session_state['bayes']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
 
-st.write("Accuracy of Random Forest with depth of " + str(st.session_state['depth']) + ": " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
-st.subheader("Voorspellingen van het random forest:")
-st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wins', 'o wins'], index=['x wins', 'o wins']))
+st.write("Accuraatheid van het Random Forest met een diepte van " + str(st.session_state['depth']) + ": " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
+st.subheader("Voorspellingen van het Random Forest:")
+st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))

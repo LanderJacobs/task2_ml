@@ -81,6 +81,6 @@ if 'bayes' not in st.session_state:
 # app
 st.title("Benchmarking Machine Learning Algorithms")
 st.subheader("van Lander Jacobs")
-st.write("Je kunt switchen tussen de pagina's en de states zullen behouden worden, maar als je de pagina refresht zul je zelfgekozen waarden opnieuw moeten ingeven.")
-st.write("Ik heb voor deze taak een dataset met mogelijke combinaties van Tic-Tac-Toe-spellen gekozen.")
-st.write("Het is belangrijk om te begrijpen dat voor elk van de sets men er vanuit gaat dat de x-speler begint.")
+st.write("Ik heb voor deze taak een dataset met 958 mogelijke combinaties van Tic-Tac-Toe-spellen gekozen. In deze dataset zijn er 9 features, 1 voor elk mogelijk vakje, met de status van elk vakje: 'x', 'o' of 'b'(=blank). Ook is het interessant om te weten dat men er van uit gaat dat de x-speler het spel begint.")
+st.write("Het is ook mogelijk om uit testen hoe accuraat de algoritmes kunnen berekenen wie wint door zelf een spelletje te spelen en te zien wat ze er van denken.")
+st.write("Je kunt switchen tussen de pagina's en de parameters aanpassen zoals je wilt, maar als je de app refresht zul je zelfgekozen waarden opnieuw moeten ingeven.")
