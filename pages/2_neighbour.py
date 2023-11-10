@@ -32,7 +32,7 @@ def read_data():
     return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
-    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
+    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=st.session_state['amount'])
 
     rfc = rfc.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred = rfc.predict(st.session_state.ttt_data["x_test"])
@@ -59,6 +59,9 @@ def translate_values(value_array, number_array):
 if 'depth' not in st.session_state:
     st.session_state['depth'] = 5
 
+if 'amount' not in st.session_state:
+    st.session_state['amount'] = 100
+
 if 'neighbours' not in st.session_state:
     st.session_state['neighbours'] = 5
 
@@ -78,8 +81,8 @@ st.button("Pas aan", on_click=button_press)
 
 st.write("Accuraatheid van Nearest Neighbour: " + str(round(st.session_state['neighbour']['accuracy'] * 100, 2)) + " %")
 st.subheader("Voorspellingen van de Nearest Neighbours:")
-st.table(pd.DataFrame(st.session_state['neighbour']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
+st.table(pd.DataFrame(st.session_state['neighbour']['confusion'], columns=['x wint', 'x verliest'], index=['x wint', 'x verliest']))
 
-st.write("Accuraatheid van het Random Forest met diepte van " + str(st.session_state['depth']) + ": " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
+st.write("Accuraatheid van het Random Forest met diepte van " + str(st.session_state['depth']) + " en " + str(st.session_state['amount']) + " bomen: " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
 st.subheader("Voorspellingen van het Random Forest:")
-st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
+st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'x verliest'], index=['x wint', 'x verliest']))

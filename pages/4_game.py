@@ -33,7 +33,7 @@ def read_data():
     return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
-    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
+    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=st.session_state['amount'])
 
     rfc = rfc.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred = rfc.predict(st.session_state.ttt_data["x_test"])
@@ -60,7 +60,10 @@ def button_press(id):
     predict()
     
     if check_win():
-        st.session_state['win'] = st.session_state['current_symbol'] + " heeft gewonnen!"
+        if np.all(st.session_state['game'] != 'b'):
+            st.session_state['win'] = 'x heeft verloren!'
+        else: 
+            st.session_state['win'] = 'x heeft gewonnnen!' if st.session_state['current_symbol'] == 'x' else 'x heeft verloren!'
     else:
         st.session_state['current_symbol'] = 'x' if st.session_state['current_symbol'] == 'o' else 'o'
 
@@ -79,6 +82,8 @@ def check_win():
         return True
     if np.all(st.session_state['game'][[0,4,8]] == st.session_state['current_symbol']) or np.all(st.session_state['game'][[2,4,6]] == st.session_state['current_symbol']):
         return True
+    if np.all(st.session_state['game'] != 'b'):
+        return True
     return False
 
 def translate_values(value_array, number_array):
@@ -95,6 +100,9 @@ def predict():
 # state variables
 if 'depth' not in st.session_state:
     st.session_state['depth'] = 5
+
+if 'amount' not in st.session_state:
+    st.session_state['amount'] = 100
 
 if 'neighbours' not in st.session_state:
     st.session_state['neighbours'] = 5
@@ -158,10 +166,10 @@ with st.container():
 
     with colf:
         st.write("Het Random Forest denkt met " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + "% zekerheid:")
-        st.write("x wint" if st.session_state["f_pred"] else "o wint")
+        st.write("x wint" if st.session_state["f_pred"] else "x verliest")
     with coln:
         st.write("De Neighbours denken met " + str(round(st.session_state['neighbour']['accuracy'] * 100, 2)) + "% zekerheid:")
-        st.write("x wint" if st.session_state["n_pred"] else "o wint")
+        st.write("x wint" if st.session_state["n_pred"] else "x verliest")
     with colb:
         st.write("Bayes denkt met " + str(round(st.session_state['bayes']['accuracy'] * 100, 2)) + "% zekerheid:")
-        st.write("x wint" if st.session_state["b_pred"] else "o wint")
+        st.write("x wint" if st.session_state["b_pred"] else "x verliest")

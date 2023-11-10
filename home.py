@@ -33,7 +33,7 @@ def read_data():
     return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
-    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
+    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=st.session_state['amount'])
 
     rfc = rfc.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred = rfc.predict(st.session_state.ttt_data["x_test"])
@@ -63,6 +63,9 @@ def translate_values(value_array, number_array):
 if 'depth' not in st.session_state:
     st.session_state['depth'] = 5
 
+if 'amount' not in st.session_state:
+    st.session_state['amount'] = 100
+    
 if 'neighbours' not in st.session_state:
     st.session_state['neighbours'] = 5
 
@@ -82,5 +85,5 @@ if 'bayes' not in st.session_state:
 st.title("Benchmarking Machine Learning Algorithms")
 st.subheader("van Lander Jacobs")
 st.write("Ik heb voor deze taak een dataset met 958 mogelijke combinaties van Tic-Tac-Toe-spellen gekozen. In deze dataset zijn er 9 features, 1 voor elk mogelijk vakje, met de status van elk vakje: 'x', 'o' of 'b'(=blank). Ook is het interessant om te weten dat men er van uit gaat dat de x-speler het spel begint.")
-st.write("Het is ook mogelijk om uit testen hoe accuraat de algoritmes kunnen berekenen wie wint door zelf een spelletje te spelen en te zien wat ze er van denken.")
+st.write("Het is ook mogelijk om uit testen hoe accuraat de algoritmes kunnen berekenen of x wint door zelf een spelletje te spelen en te zien wat ze er van denken.")
 st.write("Je kunt switchen tussen de pagina's en de parameters aanpassen zoals je wilt, maar als je de app refresht zul je zelfgekozen waarden opnieuw moeten ingeven.")

@@ -32,7 +32,7 @@ def read_data():
     return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
-    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
+    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=st.session_state['amount'])
 
     rfc = rfc.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred = rfc.predict(st.session_state.ttt_data["x_test"])
@@ -55,6 +55,9 @@ def translate_values(value_array, number_array):
 if 'depth' not in st.session_state:
     st.session_state['depth'] = 5
 
+if 'amount' not in st.session_state:
+    st.session_state['amount'] = 100
+
 if "ttt_data" not in st.session_state:
     st.session_state["ttt_data"] = read_data()
 
@@ -69,8 +72,8 @@ st.title("Naive Bayes")
 
 st.write("Accuraatheid van Naive Bayes: " + str(round(st.session_state['bayes']['accuracy'] * 100, 2)) + " %")
 st.subheader("Voorspellingen van Naive Bayes:")
-st.table(pd.DataFrame(st.session_state['bayes']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
+st.table(pd.DataFrame(st.session_state['bayes']['confusion'], columns=['x wint', 'x verliest'], index=['x wint', 'x verliest']))
 
-st.write("Accuraatheid van het Random Forest met een diepte van " + str(st.session_state['depth']) + ": " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
+st.write("Accuraatheid van het Random Forest met een diepte van " + str(st.session_state['depth'])  + " en " + str(st.session_state['amount']) + " bomen: " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
 st.subheader("Voorspellingen van het Random Forest:")
-st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
+st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'x verliest'], index=['x wint', 'x verliest']))

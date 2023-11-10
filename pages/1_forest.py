@@ -31,7 +31,7 @@ def read_data():
     return {"x_train": x_train, "x_test": x_test, "y_train": y_train, "y_test": y_test, "values": value_translation}
 
 def forest():
-    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=100)
+    rfc = RandomForestClassifier(criterion='entropy', max_depth=st.session_state.depth, n_estimators=st.session_state['amount'])
 
     rfc = rfc.fit(st.session_state.ttt_data["x_train"], st.session_state.ttt_data["y_train"])
     y_pred = rfc.predict(st.session_state.ttt_data["x_test"])
@@ -43,6 +43,7 @@ def change_forest(changed_depth):
 
 def button_press():
     st.session_state.depth = slider_value
+    st.session_state['amount'] = number_input
     st.session_state['forest'] = forest()
 
 def translate_values(value_array, number_array):
@@ -54,6 +55,9 @@ def translate_values(value_array, number_array):
 if 'depth' not in st.session_state:
     st.session_state['depth'] = 5
 
+if 'amount' not in st.session_state:
+    st.session_state['amount'] = 100
+
 if "ttt_data" not in st.session_state:
     st.session_state["ttt_data"] = read_data()
 
@@ -61,10 +65,11 @@ if 'forest' not in st.session_state:
     st.session_state['forest'] = forest()
 
 # app
-st.title("Random Forest with depth of " + str(st.session_state['depth']))
+st.title("Random Forest with depth of " + str(st.session_state['depth']) + " and " + str(st.session_state['amount']) + " trees")
 slider_value = st.slider(label="Diepte van trees", min_value=1, max_value=10, value=st.session_state["depth"])
+number_input = st.number_input(label="Diepte van trees", min_value=1, max_value=150, value=st.session_state["amount"])
 st.button("Pas aan", on_click=button_press)
 st.write("Accuraatheid van het Random Forest: " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
 st.subheader("Voorspellingen van het Random Forest:")
-st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'o wint'], index=['x wint', 'o wint']))
+st.table(pd.DataFrame(st.session_state['forest']['confusion'], columns=['x wint', 'x verliest'], index=['x wint', 'x verliest']))
 
