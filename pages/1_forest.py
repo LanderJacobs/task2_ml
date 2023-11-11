@@ -67,7 +67,7 @@ if 'forest' not in st.session_state:
 # app
 st.title("Random Forest with depth of " + str(st.session_state['depth']) + " and " + str(st.session_state['amount']) + " trees")
 slider_value = st.slider(label="Diepte van trees", min_value=1, max_value=10, value=st.session_state["depth"])
-number_input = st.number_input(label="Diepte van trees", min_value=1, max_value=150, value=st.session_state["amount"])
+number_input = st.number_input(label="Aantal trees", min_value=1, max_value=150, value=st.session_state["amount"])
 st.button("Pas aan", on_click=button_press)
 st.write("Accuraatheid van het Random Forest: " + str(round(st.session_state['forest']['accuracy'] * 100, 2)) + " %")
 st.subheader("Voorspellingen van het Random Forest:")
